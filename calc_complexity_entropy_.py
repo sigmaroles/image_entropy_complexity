@@ -7,12 +7,10 @@ import matplotlib.pyplot as plt
 import scipy.stats as stats
 
 
-basedir = "./satImage_copy/"
-csvfname = "outputs_satImage.csv"
+basedir = "./personal/"
+csvfname = "outputs_personal.csv"
 dx = 2
 dy = 2
-printLabel = False
-pngname = "plot_SatImage.png"
 
 
 def nse(p,n):  # normalized shannon entropy
@@ -68,41 +66,10 @@ if __name__=='__main__':
             C = (D(p,u) * h) / Dstar # Equation 2
 
             # ==== algoithm ends ====
-            
+
             s2 = f"{fnn},{C:.10f},{h:.10f}"
             ofh.write(s2+"\n")
             print (f"{filename} done")
 
         # file loop ends
-
-        cedf = pd.read_csv(csvfname)
-        cedf.head()
-
-        x = cedf['entropy']
-        y = cedf['complexity']
-
-        reg_result = stats.linregress(x, y)
-        xline = np.linspace(x.min(),x.max(),1000)
-        # y = mx + c
-        yline = reg_result.slope*xline + reg_result.intercept
-
-        labels = cedf['filename']
-        #labels = [s1[s1.find("(")+1:s1.find(")")] for s1 in labels] # only numbers, discard "UL" and ".png"
-
-        f = plt.figure(figsize=(12,11))
-        ax = f.gca()
-        ax.scatter(x, y)
-        ax.plot(xline,yline,color='orange',linewidth=0.9)
-
-        if printLabel:
-            for i, txt in enumerate(labels):
-                ax.annotate(txt, (x[i], y[i]), xytext = (5,1), textcoords="offset points") # https://stackoverflow.com/a/60786569
-
-        ax.set_ylabel("Complexity")
-        ax.set_xlabel("Entropy")
-
-        plt.tight_layout()
-        f.savefig(pngname, facecolor="white")
-
-        print (reg_result)
 
